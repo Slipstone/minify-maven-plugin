@@ -176,7 +176,7 @@ public class MinifyMojo extends AbstractMojo {
 		final String lessHtml = less
 				.matcher(rawHtml)
 				.replaceFirst(
-						"<link rel=\"stylesheet\" href=\"/css/styles.css\" type=\"text/css\">");
+						"<link rel=\"stylesheet\" href=\"/generated/css/styles.css\" type=\"text/css\">");
 		final File htmlLessFile = new File(sourceFolder, htmlLess);
 		FileUtils.writeStringToFile(htmlLessFile, lessHtml);
 		buildContext.refresh(htmlLessFile);
@@ -186,7 +186,7 @@ public class MinifyMojo extends AbstractMojo {
 				false,
 				join(extractAndSwap(
 						htmlContent,
-						"<link\\s+rel=\"stylesheet\"\\s+href=\"(/css/[^3][^\"]+)\".*?>",
+						"<link\\s+rel=\"stylesheet\"\\s+href=\"(/generated/css/[^3][^\"]+)\".*?>",
 						uberCss)), new File(sourceFolder, uberCss));
 		compress(
 				false,
