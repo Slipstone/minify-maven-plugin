@@ -56,7 +56,7 @@ public class MinifyMojo extends AbstractMojo {
 	/**
 	 * The target for the html file using uber css and js files
 	 * 
-	 * @parameter expression= "/index-uber.html"
+	 * @parameter expression= "/generated/index-uber.html"
 	 * @required
 	 */
 	private String htmlUber;
@@ -64,35 +64,35 @@ public class MinifyMojo extends AbstractMojo {
 	/**
 	 * The target for the html file using less and less processor
 	 * 
-	 * @parameter expression= "/index-less.html"
+	 * @parameter expression= "/generated/index-less.html"
 	 * @required
 	 */
 	private String htmlLess;
 	/**
 	 * The target for the compressed slipstone css
 	 * 
-	 * @parameter expression= "/css/uber.css"
+	 * @parameter expression= "/generated/css/uber.css"
 	 * @required
 	 */
 	private String uberCss;
 	/**
 	 * The target for the compressed 3rd party css
 	 * 
-	 * @parameter expression= "/css/3p/uber.css"
+	 * @parameter expression= "/generated/css/3p/uber.css"
 	 * @required
 	 */
 	private String uber3pCss;
 	/**
 	 * The target for the compressed slipstone javascript
 	 * 
-	 * @parameter expression= "/js/uber.js"
+	 * @parameter expression= "/generated/js/uber.js"
 	 * @required
 	 */
 	private String uberJs;
 	/**
 	 * The target for the compressed 3rd party javascript
 	 * 
-	 * @parameter expression= "/js/3p/uber.js"
+	 * @parameter expression= "/generated/js/3p/uber.js"
 	 * @required
 	 */
 	private String uber3pJs;
@@ -176,7 +176,7 @@ public class MinifyMojo extends AbstractMojo {
 		final String lessHtml = less
 				.matcher(rawHtml)
 				.replaceFirst(
-						"<link rel=\"stylesheet\" href=\"/css/styles.css\" type=\"text/css\">");
+						"<link rel=\"stylesheet\" href=\"/generated/css/styles.css\" type=\"text/css\">");
 		final File htmlLessFile = new File(sourceFolder, htmlLess);
 		FileUtils.writeStringToFile(htmlLessFile, lessHtml);
 		buildContext.refresh(htmlLessFile);
@@ -186,7 +186,7 @@ public class MinifyMojo extends AbstractMojo {
 				false,
 				join(extractAndSwap(
 						htmlContent,
-						"<link\\s+rel=\"stylesheet\"\\s+href=\"(/css/[^3][^\"]+)\".*?>",
+						"<link\\s+rel=\"stylesheet\"\\s+href=\"(/generated/css/[^3][^\"]+)\".*?>",
 						uberCss)), new File(sourceFolder, uberCss));
 		compress(
 				false,
