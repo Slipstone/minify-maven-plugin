@@ -6,7 +6,7 @@
 
 	<groupId>com.slipstone.mojo</groupId>
 	<artifactId>minify-maven-plugin</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<packaging>maven-plugin</packaging>
 
 	<scm>
@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>com.slipstone</groupId>
 		<artifactId>superpom</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.1</version>
 	</parent>
 
 	<dependencies>
