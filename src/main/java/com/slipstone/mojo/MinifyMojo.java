@@ -38,9 +38,17 @@ public class MinifyMojo extends AbstractMojo {
 	protected MavenProject project;
 
 	/**
+	 * Specifies the source of the javascript files.
+	 * 
+	 * @parameter default-value="${basedir}/src/main"
+	 * @required
+	 */
+	private File sourceJSFolder;
+
+	/**
 	 * Specifies the source of the static files.
 	 * 
-	 * @parameter default-value="${basedir}/src/main/webapp"
+	 * @parameter default-value="${basedir}/src/main/resources"
 	 * @required
 	 */
 	private File sourceFolder;
@@ -184,26 +192,32 @@ public class MinifyMojo extends AbstractMojo {
 		final StringBuilder htmlContent = new StringBuilder(lessHtml);
 		compress(
 				false,
-				join(extractAndSwap(
-						htmlContent,
-						"<link\\s+rel=\"stylesheet\"\\s+href=\"(/generated/css/[^3][^\"]+)\".*?>",
-						uberCss)), new File(sourceFolder, uberCss));
+				join(sourceFolder,
+						extractAndSwap(
+								htmlContent,
+								"<link\\s+rel=\"stylesheet\"\\s+href=\"(/generated/css/[^3][^\"]+)\".*?>",
+								uberCss)), new File(sourceFolder, uberCss));
 		compress(
 				false,
-				join(extractAndSwap(
-						htmlContent,
-						"<link\\s+rel=\"stylesheet\"\\s+href=\"(/css/3p/[^\"]+)\".*?>",
-						uber3pCss)), new File(sourceFolder, uber3pCss));
+				join(sourceFolder,
+						extractAndSwap(
+								htmlContent,
+								"<link\\s+rel=\"stylesheet\"\\s+href=\"(/css/3p/[^\"]+)\".*?>",
+								uber3pCss)), new File(sourceFolder, uber3pCss));
 		compress(
 				true,
-				join(extractAndSwap(htmlContent,
-						"<script\\s+src=\"(/js/[^3][^\"]+)\".*?</script>",
-						uberJs)), new File(sourceFolder, uberJs));
+				join(sourceJSFolder,
+						extractAndSwap(
+								htmlContent,
+								"<script\\s+src=\"(/js/[^3][^\"]+)\".*?</script>",
+								uberJs)), new File(sourceFolder, uberJs));
 		compress(
 				true,
-				join(extractAndSwap(htmlContent,
-						"<script\\s+src=\"(/js/3p/[^\"]+)\".*?</script>",
-						uber3pJs)), new File(sourceFolder, uber3pJs));
+				join(sourceJSFolder,
+						extractAndSwap(
+								htmlContent,
+								"<script\\s+src=\"(/js/3p/[^\"]+)\".*?</script>",
+								uber3pJs)), new File(sourceFolder, uber3pJs));
 		final File htmlUberFile = new File(sourceFolder, htmlUber);
 		FileUtils.writeStringToFile(htmlUberFile, htmlContent.toString());
 		buildContext.refresh(htmlUberFile);
@@ -215,7 +229,8 @@ public class MinifyMojo extends AbstractMojo {
 	 * @return
 	 * @throws IOException
 	 */
-	private String join(final List<String> files) throws IOException {
+	private String join(final File sourceFolder, final List<String> files)
+			throws IOException {
 		final StringBuilder sb = new StringBuilder();
 		for (final String file : files) {
 			final String contents = FileUtils.readFileToString(new File(
