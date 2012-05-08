@@ -9,6 +9,7 @@
 	<version>1.0.4</version>
 	<packaging>maven-plugin</packaging>
 
+
 	<scm>
 		<developerConnection>scm:git:ssh://git@slipstone.beanstalkapp.com:/minify-maven-plugin.git</developerConnection>
 		<url>scm:git:ssh://git@slipstone.beanstalkapp.com:/minify-maven-plugin.git</url>
