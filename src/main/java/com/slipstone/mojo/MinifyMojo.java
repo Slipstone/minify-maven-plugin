@@ -1,9 +1,13 @@
 package com.slipstone.mojo;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.StringReader;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -176,7 +180,7 @@ public class MinifyMojo extends AbstractMojo {
 
 	private void doIt() throws IOException {
 		final String rawHtml = FileUtils.readFileToString(
-				new File(sourceFolder, html)).replaceAll("<!--.*?-->", "");
+				new File(sourceFolder, html), "UTF-8").replaceAll("<!--.*?-->", "");
 		final Pattern less = Pattern
 				.compile(
 						"<link\\s+rel=\"stylesheet/less\"\\s+href=\"/css/styles.less\".*?>\\s*<script\\s+src=\"/js/3p/less.*?\\.js\".*?</script>",
@@ -256,7 +260,8 @@ public class MinifyMojo extends AbstractMojo {
 		if (!target.getParentFile().exists()) {
 			target.getParentFile().mkdirs();
 		}
-		final FileWriter fw = new FileWriter(target);
+		OutputStream os = new FileOutputStream(target);
+		final Writer fw = new OutputStreamWriter(os, "UTF-8");
 		if (js) {
 			new JavaScriptCompressor(new StringReader(source), jsErrorReporter)
 					.compress(fw, linebreakpos, !nomunge, jswarn,
@@ -266,6 +271,7 @@ public class MinifyMojo extends AbstractMojo {
 					linebreakpos);
 		}
 		IOUtils.closeQuietly(fw);
+		IOUtils.closeQuietly(os);
 		getLog().info("generated " + target);
 		buildContext.refresh(target);
 	}
